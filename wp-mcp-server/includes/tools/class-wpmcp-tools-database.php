@@ -48,7 +48,7 @@ class WPMCP_Tools_Database {
         ));
 
         WPMCP_Tool_Registry::register('wp_db_execute', array(
-            'description' => 'Ejecuta una sentencia SQL de escritura (INSERT, UPDATE o DELETE) contra la base de datos. UPDATE y DELETE requieren una cláusula WHERE, salvo que se pase confirm_no_where=true de forma explícita. No se permiten sentencias múltiples ni DDL (DROP/ALTER/TRUNCATE/CREATE).',
+            'description' => 'Ejecuta una sentencia SQL de escritura (INSERT, UPDATE o DELETE) contra la base de datos. UPDATE y DELETE requieren una cláusula WHERE, salvo que se pase confirm_no_where=true de forma explícita. No se permiten sentencias múltiples ni DDL (DROP/ALTER/TRUNCATE/CREATE). ADVERTENCIA: esto escribe directo en la base de datos sin pasar por los hooks ni validaciones de WordPress. NO la uses para cambiar contraseñas de usuario (el valor quedaría sin el hash correcto y rompería el login) ni para asignar roles/capabilities (usa wp_update_user para eso, que sí respeta los permisos de promoción).',
             'capability' => 'manage_options',
             'inputSchema' => array(
                 'type' => 'object',

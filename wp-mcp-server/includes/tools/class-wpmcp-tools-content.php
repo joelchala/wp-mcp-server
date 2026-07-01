@@ -307,14 +307,20 @@ class WPMCP_Tools_Content {
 
     public static function get_posts($args) {
         $per_page = isset($args['per_page']) ? min(50, max(1, absint($args['per_page']))) : 10;
+        $post_type = !empty($args['post_type']) ? sanitize_key($args['post_type']) : 'post';
         $query_args = array(
-            'post_type' => !empty($args['post_type']) ? sanitize_key($args['post_type']) : 'post',
+            'post_type' => $post_type,
             'post_status' => !empty($args['status']) ? sanitize_key($args['status']) : 'any',
             'posts_per_page' => $per_page,
             'paged' => isset($args['page']) ? max(1, absint($args['page'])) : 1,
         );
         if (!empty($args['search'])) {
             $query_args['s'] = sanitize_text_field($args['search']);
+        }
+
+        $post_type_obj = get_post_type_object($post_type);
+        if (!$post_type_obj || !current_user_can($post_type_obj->cap->edit_others_posts)) {
+            $query_args['author'] = get_current_user_id();
         }
 
         $query = new WP_Query($query_args);
@@ -333,6 +339,9 @@ class WPMCP_Tools_Content {
         $id = absint($args['id']);
         if (!get_post($id)) {
             return new WP_Error('wpmcp_not_found', 'No existe un post con ID ' . $id . '.');
+        }
+        if (!current_user_can('edit_post', $id) && !current_user_can('read_post', $id)) {
+            return new WP_Error('wpmcp_forbidden', 'No tienes permiso para ver este post.');
         }
         return self::format_post($id, true);
     }
@@ -367,11 +376,15 @@ class WPMCP_Tools_Content {
             return new WP_Error('wpmcp_invalid_arg', 'La URL proporcionada no es válida.');
         }
 
+        $post_id = !empty($args['post_id']) ? absint($args['post_id']) : 0;
+        if ($post_id && !current_user_can('edit_post', $post_id)) {
+            return new WP_Error('wpmcp_forbidden', 'No tienes permiso para adjuntar medios a este post.');
+        }
+
         require_once ABSPATH . 'wp-admin/includes/media.php';
         require_once ABSPATH . 'wp-admin/includes/file.php';
         require_once ABSPATH . 'wp-admin/includes/image.php';
 
-        $post_id = !empty($args['post_id']) ? absint($args['post_id']) : 0;
         $attachment_id = media_sideload_image($url, $post_id, isset($args['title']) ? $args['title'] : null, 'id');
 
         if (is_wp_error($attachment_id)) {
