@@ -100,9 +100,12 @@ class WPMCP_Server {
     }
 
     private function handle_initialize($params) {
-        $requested_version = isset($params['protocolVersion']) ? $params['protocolVersion'] : self::PROTOCOL_VERSION;
+        // Negociación según la spec: si el cliente pide una versión soportada se usa; si no, se responde con la más reciente propia.
+        $supported = array(self::PROTOCOL_VERSION, '2025-03-26', '2024-11-05');
+        $requested = isset($params['protocolVersion']) ? $params['protocolVersion'] : '';
+        $version = in_array($requested, $supported, true) ? $requested : self::PROTOCOL_VERSION;
         return array(
-            'protocolVersion' => $requested_version,
+            'protocolVersion' => $version,
             'capabilities' => array(
                 'tools' => new stdClass(),
             ),

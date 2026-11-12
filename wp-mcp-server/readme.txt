@@ -4,7 +4,7 @@ Tags: mcp, ai, claude, rest-api, automation
 Requires at least: 5.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,9 @@ Acepta mensajes JSON-RPC 2.0 (`initialize`, `tools/list`, `tools/call`, etc). No
 3. Ve a Ajustes → WP MCP Server para ver el endpoint y el estado de Application Passwords.
 
 == Changelog ==
+
+= 1.1.0 =
+* Negociación de versión del protocolo MCP (2025-06-18, 2025-03-26, 2024-11-05) en lugar de reflejar la versión del cliente.
 
 = 1.0.0 =
 * Versión inicial.
