@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: WP MCP Server
- * Plugin URI: https://coposys.site
+ * Plugin URI: https://github.com/joelchala/wp-mcp-server
  * Description: Servidor MCP (Model Context Protocol) nativo para WordPress. Permite conectar Claude u otra IA compatible con MCP para gestionar contenido, plugins, temas y usuarios, autenticado con WordPress Application Passwords.
  * Version: 1.1.0
  * Author: Joel Chala
- * Author URI: https://coposys.site
+ * Author URI: https://profiles.wordpress.org/chalatico07/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: wp-mcp-server
