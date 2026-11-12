@@ -1,56 +1,56 @@
 === WP MCP Server ===
-Contributors: joelchala
+Contributors: chalatico07
 Tags: mcp, ai, claude, rest-api, automation
 Requires at least: 5.6
-Tested up to: 6.7
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Servidor MCP (Model Context Protocol) nativo para WordPress. Permite conectar Claude u otra IA compatible con MCP para gestionar contenido, plugins, temas y usuarios.
+Native MCP (Model Context Protocol) server for WordPress. Let Claude or any MCP client manage your content, plugins, themes and users.
 
 == Description ==
 
-Este plugin convierte tu instalación de WordPress en un servidor MCP (transporte Streamable HTTP), autenticado con WordPress Application Passwords. Cualquier cliente compatible con MCP (Claude Desktop, Claude Code, u otros) puede conectarse y usar herramientas para:
+This plugin turns your WordPress site into an MCP server (Streamable HTTP transport) authenticated with WordPress Application Passwords. Any MCP-compatible client (Claude Desktop, Claude Code, and others) can connect and use tools to:
 
-* Crear, editar, listar y eliminar posts/páginas
-* Subir y gestionar medios
-* Gestionar categorías, etiquetas y comentarios
-* Instalar, activar y desactivar plugins y temas
-* Gestionar usuarios
-* (Opcional, deshabilitado por defecto) Ejecutar SQL directo de lectura y escritura sobre la base de datos
+* Create, edit, list and delete posts and pages
+* Upload and manage media
+* Manage categories, tags and comments
+* Install, activate and deactivate plugins and themes (from WordPress.org)
+* Manage users
+* (Optional, disabled by default) Run direct SQL reads and writes against the database
 
-= Autenticación =
+= Authentication =
 
-La autenticación usa el sistema nativo de **WordPress Application Passwords**. Los permisos que tendrá la IA son exactamente los del usuario de WordPress dueño de la contraseña de aplicación usada — no hay un sistema de permisos independiente. Application Passwords requiere HTTPS (o entorno `local`).
+Authentication uses the native **WordPress Application Passwords** system. The AI has exactly the permissions of the WordPress user that owns the application password used. There is no separate permission system. Application Passwords require HTTPS (or a `local` environment).
 
-Para conectar:
+To connect:
 
-1. Ve a tu perfil de usuario en WordPress y genera una nueva "Application Password".
-2. Configura tu cliente MCP para apostar al endpoint `https://tu-sitio.com/wp-json/wp-mcp/v1/mcp` usando el transporte Streamable HTTP, enviando la cabecera `Authorization: Basic base64(usuario:contraseña_de_aplicación)`.
-3. Usa un usuario de WordPress con el rol adecuado al alcance que quieras dar a la IA (Editor para solo contenido, Administrador para gestión completa incluyendo plugins/temas/usuarios).
+1. Go to your WordPress user profile and create a new Application Password.
+2. Point your MCP client to the endpoint `https://your-site.com/wp-json/wp-mcp/v1/mcp` using the Streamable HTTP transport, sending the header `Authorization: Basic base64(username:application_password)`.
+3. Use a WordPress user whose role matches the scope you want to give the AI (Editor for content only, Administrator for full management including plugins, themes and users).
 
-= Herramientas de base de datos =
+= Database tools =
 
-Las herramientas `wp_db_list_tables`, `wp_db_describe_table`, `wp_db_query` (SELECT) y `wp_db_execute` (INSERT/UPDATE/DELETE) dan acceso SQL directo a la base de datos, sin pasar por los hooks de WordPress. Están deshabilitadas por defecto y deben activarse explícitamente en Ajustes → WP MCP Server. Siempre requieren la capability `manage_options` (Administrador), bloquean sentencias múltiples y DDL (DROP/ALTER/TRUNCATE/CREATE), y exigen cláusula WHERE en UPDATE/DELETE salvo que se confirme explícitamente con `confirm_no_where=true`.
+The tools `wp_db_list_tables`, `wp_db_describe_table`, `wp_db_query` (SELECT) and `wp_db_execute` (INSERT/UPDATE/DELETE) give direct SQL access to the database, bypassing WordPress hooks. They are disabled by default and must be enabled explicitly under Settings → WP MCP Server. They always require the `manage_options` capability (Administrator), block multiple statements and DDL (DROP/ALTER/TRUNCATE/CREATE), and require a WHERE clause on UPDATE/DELETE unless `confirm_no_where=true` is passed.
 
 = Endpoint =
 
 `POST /wp-json/wp-mcp/v1/mcp`
 
-Acepta mensajes JSON-RPC 2.0 (`initialize`, `tools/list`, `tools/call`, etc). No soporta batching ni streaming SSE por GET — responde siempre con un único objeto JSON.
+It accepts JSON-RPC 2.0 messages (`initialize`, `tools/list`, `tools/call`, etc.). Batching and SSE streaming over GET are not supported; it always replies with a single JSON object.
 
 == Installation ==
 
-1. Sube la carpeta `wp-mcp-server` a `/wp-content/plugins/`.
-2. Activa el plugin desde el panel de administración.
-3. Ve a Ajustes → WP MCP Server para ver el endpoint y el estado de Application Passwords.
+1. Upload the `wp-mcp-server` folder to `/wp-content/plugins/`.
+2. Activate the plugin from the WordPress admin.
+3. Go to Settings → WP MCP Server to see the endpoint and the Application Passwords status.
 
 == Changelog ==
 
 = 1.1.0 =
-* Negociación de versión del protocolo MCP (2025-06-18, 2025-03-26, 2024-11-05) en lugar de reflejar la versión del cliente.
+* MCP protocol version negotiation (2025-06-18, 2025-03-26, 2024-11-05) instead of echoing the client's version.
 
 = 1.0.0 =
-* Versión inicial.
+* Initial release.
