@@ -23,7 +23,7 @@ edit('wp-mcp-server.php', [
 edit('uninstall.php', [(r"delete_option\('wpmcp_enable_db_tools'\);\r?\n", '')])
 edit('admin/class-wpmcp-admin.php', [
     (r"        register_setting\('wpmcp_settings', 'wpmcp_enable_db_tools'.*?\)\);\r?\n(?=    \})", ''),
-    (r"<?php echo wpmcp_db_tools_enabled\(\) \? ', base de datos' : ''; \?>", ''),
+    (r"<\?php echo wpmcp_db_tools_enabled\(\) \? ', base de datos' : ''; \?>", ''),
     (r"                    <tr>\s*<th scope=\"row\">Acceso SQL directo</th>.*?</tr>\r?\n", ''),
 ])
 edit('readme.txt', [
